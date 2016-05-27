@@ -1,5 +1,12 @@
+# Users can set the dirtysymb env var in their .bash_profile, etc,
+# or they can leave it unset and it will default to the '*'.
+export dirtysymb=${dirtysymb:="|ب_ب|"};
+
+##
+# Retreive current GIT branch of local file system
+# Based on: http://stackoverflow.com/a/13003854/170413
+##
 find_git_branch() {
-  # Based on: http://stackoverflow.com/a/13003854/170413
   local branch
   if branch=$(git rev-parse --abbrev-ref HEAD 2> /dev/null); then
     if [[ "$branch" == "HEAD" ]]; then
@@ -11,10 +18,13 @@ find_git_branch() {
   fi
 }
 
+##
+# Retreive directory status: clean or dirty.
+##
 find_git_dirty() {
   local status=$(git status --porcelain 2> /dev/null)
   if [[ "$status" != "" ]]; then
-    git_dirty='*'
+    git_dirty=$dirtysymb
   else
     git_dirty=''
   fi
