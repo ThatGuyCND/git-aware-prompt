@@ -14,7 +14,11 @@ calc_git_staff() {
     local branch
     if branch=$(git rev-parse --abbrev-ref HEAD 2> /dev/null); then
       if [[ "$branch" == "HEAD" ]]; then
-        branch='detached*'
+        if tag=$(git describe --exact-match --tags 2> /dev/null); then
+          branch="tags/$tag"
+        else
+          branch='detached*'
+        fi
       fi
       git_branch="($branch)"
     else
