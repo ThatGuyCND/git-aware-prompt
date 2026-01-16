@@ -1,6 +1,6 @@
 # Users can set the dirtysymb env var in their .bash_profile, etc,
 # or they can leave it unset and it will default to the '*'.
-export dirtysymb=${dirtysymb:="|ب_ب|"};
+export dirtysymb=${dirtysymb:="(;_;)"};
 
 ##
 # Retreive current GIT branch of local file system
@@ -24,7 +24,8 @@ find_git_branch() {
 find_git_dirty() {
   local status=$(git status --porcelain 2> /dev/null)
   if [[ "$status" != "" ]]; then
-    git_dirty=$dirtysymb
+    local change_count=$(echo "$status" | wc -l | tr -d '[[:space:]]')
+    git_dirty="$dirtysymb [$change_count]"
   else
     git_dirty=''
   fi
